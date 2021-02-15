@@ -1,0 +1,256 @@
+# -*- coding: utf-8; mode: tcl; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- vim:fenc=utf-8:ft=tcl:et:sw=4:ts=4:sts=4
+
+PortSystem              1.0
+#PortGroup               php 1.1
+#PortGroup               compiler_blacklist_versions 1.0
+#PortGroup               old_openssl 1.0
+
+name                    fldphp
+version					7.4.10
+revision				7
+categories				lang net www
+homepage				https://www.php.net
+platforms               darwin freebsd
+maintainers             {FLOYDian @FLOYDIAN}
+license                 PHP-3.01
+distname				php-${version}
+master_sites			https://www.php.net/distributions/
+use_parallel_build      yes
+livecheck.type          none
+epoch					0
+use_xz					yes
+checksums				rmd160  e48f95addc513d9cdb515d4e6d0d4728281eec1f \
+						sha256  c2d90b00b14284588a787b100dee54c2400e7db995b457864d66f00ad64fb010 \
+						size    10298480
+conflicts				php72
+
+description             FLDPHP: FLOYD Custom Hypertext Preprocessor
+
+long_description        FLDPHP is a custom version of the widely-used general-purpose scripting \
+                        language that is especially suited for developing \
+                        web sites, but can also be used for command-line \
+                        scripting.
+
+depends_lib 			port:apache2 \
+						port:pkgconfig \
+						path:bin/gsed:gsed \
+                        port:bzip2 \
+                        port:curl \
+                        port:cyrus-sasl2 \
+                        port:freetype \
+                        port:gettext \
+                        port:gmp \
+                        port:icu \
+                        port:jpeg \
+                        port:kerberos5 \
+                        port:libcomerr \
+                        port:libgeoip \
+                        port:libiconv \
+                        port:libmcrypt \
+                        port:libpng \
+                        port:libxml2 \
+                        port:mhash \
+                        port:oniguruma6 \
+                        port:openldap \
+                        port:pcre2 \
+                        port:tidy \
+                        port:webp \
+                        port:zlib \
+                        path:lib/libssl.dylib:openssl
+
+depends_build			port:pkgconfig \
+						port:cclient
+						
+#require_active_variants apache2 preforkmpm
+						
+
+    # https://trac.macports.org/ticket/31590
+    # Tested all subports (except oracle) and they built with clang-425.  The reported failure was with Xcode 4.2.
+    # Xcode 4.3 may work, but leaving it blacklisted due to lack of testing
+    compiler.blacklist  {clang < 400}
+
+    set php             php
+    set branch			7.4
+    set phpinidir       ${prefix}/etc/${php}
+    set extraphpinidir  ${prefix}/var/db/${php}
+	set major           [lindex [split ${branch} .] 0]
+	
+	set fpmuser             www
+    set fpmgroup            www
+    
+    set apxs ${prefix}/bin/apxs
+    set confdir ${prefix}/etc/apache2
+    set moduledir ${prefix}/lib/apache2/modules
+    
+    configure.args      --mandir=${prefix}/share/man \
+                        --infodir=${prefix}/share/info \
+                        --program-suffix=${branch} \
+                        --includedir=${prefix}/include/${php} \
+                        --libdir=${prefix}/lib/${php} \
+                        --with-config-file-path=${phpinidir} \
+                        --with-config-file-scan-dir=${extraphpinidir} \
+                        --with-apxs2=${apxs} \
+                        --disable-cli \
+                        --enable-fpm \
+                        --datadir=${prefix}/share/examples/${php} \
+                        --sysconfdir=${phpinidir} \
+                        --with-fpm-user=${fpmuser} \
+                        --with-fpm-group=${fpmgroup} \
+                        --disable-cgi \
+                        --disable-all \
+                        --with-libxml \
+                        --with-openssl \
+                        --with-kerberos=${prefix} \
+                        --with-external-pcre=${prefix} \
+                        --with-zlib=${prefix} \
+                        --enable-bcmath \
+                        --with-bz2=${prefix} \
+                        --enable-calendar \
+                        --enable-ctype \
+                        --with-curl \
+                        --enable-dom \
+                        --enable-exif \
+                        --enable-fileinfo \
+                        --enable-filter \
+                        --enable-gd \
+                        --with-webp \
+						--with-jpeg \
+						--with-xpm \
+						--with-freetype \
+                        --enable-gd-native-ttf \
+                        --with-gettext=${prefix} \
+                        --with-gmp=${prefix} \
+                        --with-mhash=${prefix} \
+                        --with-iconv=${prefix} \
+                        --with-imap=${prefix} \
+						--with-kerberos \
+                    	--with-imap-ssl=${prefix} \
+                    	--enable-intl \
+                        --enable-json \
+                        --with-ldap=${prefix} \
+                        --with-ldap-sasl \
+                        --enable-mbstring \
+                        --enable-mbregex \
+						--with-mysql=${workpath}/mariadb \
+                        --with-mysqli=${prefix}/lib/mariadb/bin/mysql_config \
+                        --with-pdo-mysql=${prefix}/lib/mariadb/bin/mysql_config \
+                        --with-mysql-sock=${prefix}/var/run/mariadb/mysqld.sock \
+                        --enable-opcache \
+                        --enable-pdo \
+                        --with-zlib-dir=${prefix} \
+                        --enable-phar \
+                        --enable-posix \
+                        --with-libedit \
+                        --enable-session \
+                        --enable-simplexml \
+                        --with-tidy=${prefix} \
+                        --enable-tokenizer \
+                        --enable-xml \
+                        --enable-xmlreader \
+                        --enable-xmlwriter \
+                        --with-zip 
+
+#                        --with-pear=${prefix}/lib/php
+
+#                        --enable-apcu-spinlocks \
+#                        --with-mcrypt=${prefix} \
+#                        --with-geoip=${prefix}
+
+
+    # Ensure we don't regenerate the parsers even if flex/re2c/bison are installed.
+    configure.env       LEX=true \
+                        RE2C=true \
+                        YACC=true \
+                        PHP_MYSQLND_ENABLED=yes \
+                        PHP_OPENSSL=yes
+
+	configure.cppflags	-I${worksrcpath}
+    
+        
+  
+    configure.universal_args-delete --disable-dependency-tracking
+    
+    test.run            yes
+    
+    destroot.destdir    INSTALL_ROOT=${destroot}
+
+    # required for ICU
+    compiler.cxx_standard   2011
+    
+     #php.extensions         mysqli pdo_mysql
+     #php.extensions.zend	opcache
+
+	patch.pre_args      -p1
+    patchfiles-append       patch-sapi-fpm-php-fpm.conf.in.diff
+    
+    post-patch {
+        reinplace "s|@PHP@|${php}|g" ${worksrcpath}/sapi/fpm/php-fpm.conf.in
+    }
+    
+         
+    # Apache2Handler parameters
+    build.target            libs/libphp${major}.bundle
+    
+    #build.target            fpm
+    
+    #destroot.target         install-fpm
+    
+    destroot.keepdirs       ${destroot}${prefix}/var/log/${php} \
+                            ${destroot}${prefix}/var/run/${php}
+
+### CLI SAPI ###
+   
+#    configure.args-replace  --disable-cli --enable-cli
+    
+    destroot.target         install-cli install-build install-headers install-programs
+    
+    destroot.keepdirs       ${destroot}${extraphpinidir}
+
+
+    
+        post-extract {
+            file mkdir ${workpath}/mariadb
+            file link -symbolic ${workpath}/mariadb/lib ${prefix}/lib/mariadb
+            file link -symbolic ${workpath}/mariadb/include ${prefix}/include/mariadb
+            #move ${php.build_dirs}/config0.m4 ${php.build_dirs}/config.m4
+
+        }
+        
+        #configure.args-append   --with-mysql=${workpath}/mariadb \
+                                --with-mysqli=${prefix}/lib/mariadb/bin/mysql_config \
+                                --with-pdo-mysql=${prefix}/lib/mariadb/bin/mysql_config \
+                                --with-mysql-sock=${prefix}/var/run/mariadb/mysqld.sock
+
+    destroot {
+        xinstall -m 755 -d ${destroot}${moduledir} ${destroot}${confdir}/extra
+        xinstall -m 644 ${worksrcpath}/libs/libphp${major}.so ${destroot}${moduledir}/mod_${php}.so
+        xinstall -m 644 ${filespath}/mod_php.conf.in ${destroot}${confdir}/extra/mod_${php}.conf
+        reinplace s/@MAJOR@/${major}/g ${destroot}${confdir}/extra/mod_${php}.conf
+    }    
+
+    post-destroot {
+            set docdir ${destroot}${prefix}/share/doc/${subport}
+            xinstall -d ${docdir}
+            
+            # Copy the default php.ini files.
+	        xinstall -m 755 -d ${destroot}${phpinidir}
+            xinstall -m 644 -W ${worksrcpath} \
+                php.ini-development \
+                php.ini-production \
+                ${destroot}${phpinidir}
+
+            # Copy mysqlnd headers.
+            xinstall -d ${destroot}${prefix}/include/${php}/php/ext/mysqlnd
+            xinstall -m 644 {*}[glob ${worksrcpath}/ext/mysqlnd/*.h] ${destroot}${prefix}/include/${php}/php/ext/mysqlnd
+            
+            # FPM specific
+            xinstall -d -o ${fpmuser} -g ${fpmgroup} ${destroot}${prefix}/var/log/${php} ${destroot}${prefix}/var/run/${php}
+            #xinstall -m 0755 -W ${workpath}/${php}-${version}/sapi/fpm php-fpm ${destroot}${prefix}/sbin
+            file copy ${workpath}/${php}-${version}/sapi/fpm/php-fpm ${prefix}/sbin
+            #xinstall -d -m 0640 ${workpath}/${php}-${version}/sapi/fpm/php-fpm.conf ${prefix}/etc
+            #xinstall -d -m 0640 ${workpath}/${php}-${version}/sapi/fpm/status.html ${prefix}/${php}/php/fpm
+            #xinstall -d -m 0640 ${prefix}/php/etc/conf.d
+            #xinstall -d -m 0640 ${workpath}/${php}-${version}/sapi/fpm/php-fpm.conf ${prefix}/${php}/etc
+            #xinstall -d -m 0640 ${workpath}/${php}-${version}/sapi/fpm/www.conf ${prefix}/${php}/etc/php-fpm.d
+    }
+
