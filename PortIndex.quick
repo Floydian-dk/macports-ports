@@ -1,4 +1,5 @@
 mariadb-10.1 0
 mariadb-10.1-server 555
 fldphp 894
-freeradius 1833
+rspamd 1833
+freeradius 3034
