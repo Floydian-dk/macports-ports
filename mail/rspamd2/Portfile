@@ -39,7 +39,8 @@ depends_lib-append  \
                     port:libunwind \
                     path:lib/libopenblas.dylib:OpenBLAS \
                     path:lib/libssl.dylib:openssl \
-                    port:perl5
+                    port:perl5 \
+                    port:ragel
 
 
 # fatal error: error in backend: Cannot select: intrinsic %llvm.x86.aesni.aesenclast
