@@ -45,7 +45,7 @@ depends_lib-append  \
                     port:ragel
 
 pre-build {
-    build.env-append CPATH='/opt/local/include;/usr/local/include'
+    build.env-append JensErGod='en test'
 }
 
 # fatal error: error in backend: Cannot select: intrinsic %llvm.x86.aesni.aesenclast
