@@ -40,9 +40,7 @@ depends_lib-append  \
                     path:lib/libopenblas.dylib:OpenBLAS \
                     path:lib/libssl.dylib:openssl \
                     port:perl5 \
-                    port:ragel \
-                    path:/usr/local/libhs.dylib:hyperscan \
-                    path:/usr/local/libsodium.dylib:libsodium
+                    port:ragel
 
 
 # fatal error: error in backend: Cannot select: intrinsic %llvm.x86.aesni.aesenclast
