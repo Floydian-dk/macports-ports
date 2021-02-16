@@ -34,14 +34,7 @@ depends_build-append \
 
 depends_lib-append  \
                     port:fann \
-                    port:gd2 \
                     path:lib/pkgconfig/glib-2.0.pc:glib2 \
-                    port:gmime \
-                    port:hyperscan \
-                    port:icu \
-                    port:libevent \
-                    port:libmagic \
-                    port:libsodium \
                     port:libstemmer \
                     port:libunwind \
                     port:lua \
@@ -49,13 +42,8 @@ depends_lib-append  \
                     path:lib/libopenblas.dylib:OpenBLAS \
                     path:lib/libssl.dylib:openssl \
                     port:perl5 \
-                    port:ragel \
-                    port:sqlite3 \
-                    port:zlib
+                    port:ragel
 
-depends_run-append \
-                    port:hiredis \
-                    port:redis
 
 # fatal error: error in backend: Cannot select: intrinsic %llvm.x86.aesni.aesenclast
 compiler.blacklist  {clang < 800}
