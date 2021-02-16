@@ -45,7 +45,7 @@ depends_lib-append  \
                     port:ragel
 
 pre-build {
-    build.env JensErGod=Test
+    build.env-append JENSERGOD=Test
 }
 
 # fatal error: error in backend: Cannot select: intrinsic %llvm.x86.aesni.aesenclast
