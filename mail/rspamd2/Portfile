@@ -42,7 +42,7 @@ depends_lib-append  \
                     port:perl5 \
                     port:ragel \
                     path:/usr/local/libhs.dylib:hyperscan \
-                    path:/usr/local/libsodium.dylib:sodium
+                    path:/usr/local/libsodium.dylib:libsodium
 
 
 # fatal error: error in backend: Cannot select: intrinsic %llvm.x86.aesni.aesenclast
