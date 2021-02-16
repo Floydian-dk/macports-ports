@@ -87,6 +87,7 @@ configure.args-append \
     -DPCRE_ROOT_DIR=/usr/lib \
     -DRSPAMD_USER=${rspamd_user} \
     -DRUNDIR=${prefix}/var/run/${name}
+    -DINCLUDE_SUFFIXES=/opt/local;/usr/local
 
 # Critical dependency note: port:pcre and port:pcre2 break the rspamd binary;
 # use native /usr/lib/libpcre.dylib.  See https://github.com/rspamd/rspamd/issues/2884
