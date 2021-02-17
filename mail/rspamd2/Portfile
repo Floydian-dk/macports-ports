@@ -69,7 +69,7 @@ cmake.set_osx_architectures no
 configure.args-append \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
     -DCMAKE_INSTALL_PREFIX=${prefix} \
-    -DCONFDIR=/usr/local/Server/Mail/Config/rspamd \
+    -DCONFDIR="/usr/local/Server/Mail/Config/rspamd" \
     -DDBDIR=/usr/local/Server/Mail/Data/rspamd \
     -DENABLE_FANN=ON \
     -DENABLE_GD=ON \
