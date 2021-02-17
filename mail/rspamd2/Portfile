@@ -57,8 +57,7 @@ set rspamd_user     _rspamd
 set rspamd_group    ${rspamd_user}
 add_users ${rspamd_user} group=${rspamd_group} realname=Rspamd
 
-#libpath             ${prefix}/var/lib/${name}
-libpath             /usr/local/Server/Mail/Data/rspamd
+libpath             ${prefix}/var/lib/${name}
 
 # -DCMAKE_OSX_ARCHITECTURES="x86_64" causes the "Symbol not found: _blake2b_blocks_x86" error
 # See https://github.com/rspamd/rspamd/issues/2883
@@ -69,8 +68,8 @@ cmake.set_osx_architectures no
 configure.args-append \
     -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
     -DCMAKE_INSTALL_PREFIX=${prefix} \
-    -DCONFDIR="/usr/local/Server/Mail/Config/rspamd" \
-    -DDBDIR=/usr/local/Server/Mail/Data/rspamd \
+    -DCONFDIR=${prefix}/etc/${name} \
+    -DDBDIR=${prefix}/var/lib/${name} \
     -DENABLE_FANN=ON \
     -DENABLE_GD=ON \
     -DENABLE_HYPERSCAN=ON \
